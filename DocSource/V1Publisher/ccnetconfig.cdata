@@ -1,0 +1,6 @@
+<![CDATA[
+		<publishers>
+			<xmllogger />
+			<versionone url="http://V1Host/VersionOne/" username="admin" password="admin" webroot="http://CCHost/ccnet" referenceexpression="[A-Z]{1,2}-[0-9]+" referencefield="Number"/>
+		</publishers>
+]]>

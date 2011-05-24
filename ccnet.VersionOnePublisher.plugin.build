@@ -1,0 +1,257 @@
+<project name='ccnet.VersionOnePublisher.plugin' default='compile'>
+	<property name='project.name' value='${project::get-name()}' />
+
+	<property name='ver.major' value='8' />
+	<property name='ver.minor' value='1' />
+	<property name='ver.major.minor' value='${ver.major}.${ver.minor}' />
+	<property name='build.version' value='${ver.major.minor}' />
+	<property name='stage.dir' value='stage' />
+	<property name='package.dir' value='package' />
+	<property name='publish.dir' value='publish' unless="${property::exists('publish.dir')}" />
+
+	<property name="doc.output.dir" value="doc"/>
+
+	<if test="${property::exists('ver.build')}">
+		<property name='build.version' value='${ver.major.minor}.${ver.build}' />
+		<if test="${property::exists('ver.revision') and int::parse(ver.revision) > 0}">
+			<property name='build.version' value='${ver.major.minor}.${ver.build}.${ver.revision}' />
+		</if>
+	</if>
+	
+	<property name='build.config' value='Debug' />
+	<target name='debug' description='Select Debug build'>
+		<property name='build.config' value='Debug' />
+	</target>
+	<target name='release' description='Select Release build'>
+		<property name='build.config' value='Release' />
+	</target>
+
+	<!--== SETVERSION ==-->
+	<target name='setversion' description='Update assembly version numbers in source code'>
+		<attrib normal='true'>
+			<fileset>
+				<include name='**\AssemblyInfo.cs' />
+				<include name='**\AssemblyInfoCommon.cs' />
+			</fileset>
+		</attrib>
+		<update-version build='${ver.build}' revision='${ver.revision}' >
+			<fileset>
+				<include name='**\AssemblyInfo.cs' />
+				<include name='**\AssemblyInfoCommon.cs' />
+			</fileset>
+		</update-version>
+	</target>
+
+	<!--== CLEAN ==-->
+	<target name='clean'>
+		<call target='compile.clean' />
+		<call target='package.clean' />
+		<call target='gendoc.clean' />
+		<delete dir='${stage.dir}' if='${directory::exists(stage.dir)}' failonerror='false' />
+	</target>
+	<target name='cleanclean'>
+		<call target='compile.cleanclean' />
+		<call target='package.clean' />
+		<delete dir='${stage.dir}' if='${directory::exists(stage.dir)}' failonerror='false' />
+	</target>
+
+	<!--== COMPILE ==-->
+	<target name='compile' description='Compile all projects' depends='compile.init'>
+		<exec program='${msbuild.exe}' commandline='${compile.sln} /t:Rebuild /p:Configuration=${build.config} ${msbuild.args}' basedir='${msbuild.dir}' />
+	</target>
+
+	<target name='compile.init'>
+		<property name='msbuild.dir' value='C:\Windows\Microsoft.NET\Framework\v3.5\' />
+		<property name='msbuild.exe' value='MSBuild.exe' />
+		<property name='msbuild.args' value='/v:q /consoleloggerparameters:NoSummary /nologo' />
+		<property name='compile.sln' value='${project.name}.sln' />
+	</target>
+
+	<target name='compile.clean'>
+		<delete failonerror='false'>
+			<fileset>
+				<include name='**\obj\${build.config}\**' />
+				<include name='**\bin\${build.config}\**' />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name='compile.cleanclean'>
+		<delete failonerror='false'>
+			<fileset>
+				<include name='**\obj\**' />
+				<include name='**\bin\**' />
+			</fileset>
+		</delete>
+	</target>
+	
+	<!--== PACKAGE ==-->
+	<target name='package' description='Create final package' depends='package.init package.clean gendoc package.distro.stage'>
+		<mkdir dir='${package.dir}' unless='${directory::exists(package.dir)}' />
+
+		<!-- move the source to the stage dir -->
+		<copy todir='${stage.src.dir}'>
+			<fileset>
+				<include name='**\*' />
+				<exclude name='**\bin\**' />
+				<exclude name='**\obj\**' />
+				<exclude name='**\Common\**' />
+				<exclude name='**\temp\**' />
+				<exclude name='**\${stage.dir}\**' />
+				<exclude name='**\${package.dir}\**' />
+				<exclude name='**\*.build' />
+				<exclude name='**\_ReSharper*\**' />
+				<exclude name='**\*.resharper*' />
+				<exclude name='**\*.user' />
+				<exclude name='**\*.suo' />
+				<exclude name='**\nunit.results.xml' />
+				<exclude name='**\ncover.results.xml' />
+			</fileset>
+		</copy>
+
+		<!-- write copyright to everything in stage dir -->
+		<exec program='Common\Tools\HeaderWriter.exe' workingdir='${stage.dir}' />
+
+		<!-- zip the final stage dir -->
+		<zip zipfile='${package.distro.zipfile}'>
+			<fileset basedir='${stage.dir}\bin'>
+				<include name='**\**' />
+			</fileset>
+		</zip>
+
+		<zip zipfile='${package.source.zipfile}'>
+			<fileset basedir='${stage.dir}\source'>
+				<include name='**\**' />
+			</fileset>
+		</zip>
+
+	</target>
+
+	<target name='package.distro.stage' depends='package.init'>
+		<property name='stage.distro.dir' value='${stage.bin.dir}'/>
+
+		<mkdir dir='${stage.bin.dir}' />
+		<foreach item='Folder' property='gizmo.dir'>
+			<in>
+				<items>
+					<include name='*' />
+					<exclude name='**Tests**' />
+				</items>
+			</in>
+			<do>
+				<copy todir='${stage.bin.dir}'>
+					<fileset basedir='${gizmo.dir}\bin\${build.config}'>
+						<include name='*' />
+						<exclude name='config.xml' />
+					</fileset>
+				</copy>
+				<copy todir='${stage.bin.dir}\Doc'>
+					<fileset basedir='${gizmo.dir}\Doc'>
+						<include name='**\**' />
+					</fileset>
+				</copy>
+			</do>
+		</foreach>
+	</target>
+
+	<target name='package.init'>
+		<property name='package.distro.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin-${build.version}.zip' />
+		<property name='package.source.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin.Source-${build.version}.zip' />
+		<property name='stage.src.dir' value='${stage.dir}\source' />
+		<property name='stage.bin.dir' value='${stage.dir}\bin' />
+	</target>
+
+	<target name='package.clean' depends='package.init'>
+		<delete dir='${package.dir}' if='${directory::exists(package.dir)}' failonerror='false' />
+		<delete dir='${stage.src.dir}' if='${directory::exists(stage.src.dir)}' failonerror='false' />
+		<delete dir='${stage.bin.dir}' if='${directory::exists(stage.bin.dir)}' failonerror='false' />
+	</target>
+
+	<!--== GENDOC ==-->
+	<target name='gendoc'>
+		<call target='gendoc.init'/>
+		<call target='gendoc.index'/>
+		<call target='gendoc.content'/>
+	</target>
+	
+	<target name='gendoc.init'>
+		<property name='doc.source.dir' value='DocSource'/>
+		<mkdir dir='${doc.output.dir}\Common' />
+		<copy todir='${doc.output.dir}\Common' file='${doc.source.dir}\Common\v1integration.css' />
+		<copy todir='${doc.output.dir}\CCNetDoc'>
+		    <fileset basedir='${doc.source.dir}/CCNetDoc'>
+		        <include name='**/*'/>
+		    </fileset>
+		</copy>
+		<copy todir='${doc.output.dir}\V1Publisher'>
+		    <fileset basedir='${doc.source.dir}/V1Publisher'>
+		        <include name='**/*.jpg'/>
+		    </fileset>
+		</copy>
+	</target>
+	
+	<target name='gendoc.index' description='Generate Documentation' depends='gendoc.init'>
+		<foreach item='File' property='filename'>
+			<in>
+				<items>
+					<include name='${doc.source.dir}\*.xml' />
+				</items>
+			</in>		
+			<do>
+				<property name='filename.noext' value="${path::get-file-name-without-extension(filename)}"/>
+				<exec workingdir='${doc.source.dir}' basedir='Common\docbook\xsltproc\' program='xsltproc.exe' commandline='-o ..\${doc.output.dir}\${filename.noext}.html Common\index.xsl ${filename}' />					
+			</do>
+		</foreach>
+	</target>
+	
+	<target name='gendoc.olink' description='Create target databases for the olink command' depends='gendoc.init'>
+		<property name='collect.xref.targets' value='only'/>
+		<call target='gendoc.content.base'/>
+	</target>
+	
+	<target name='gendoc.content' description='Generate documentation for the content pages' depends='gendoc.init,gendoc.olink'>
+		<property name='collect.xref.targets' value='no'/>	
+		<call target='gendoc.content.base'/>
+	</target>
+	
+	<target name='gendoc.content.base' depends='gendoc.init'>
+		<foreach item='Folder'  property='foldername'>
+			<in>
+				<items basedir='${doc.source.dir}'>
+					<include name='*'/>
+					<exclude name='Common'/>
+					<exclude name='.'/>					
+				</items>
+			</in>
+			<do>
+				<property name='content.doc.output.dir' value='${doc.output.dir}\${path::get-file-name(foldername)}'/>
+				<mkdir dir='${content.doc.output.dir}' />
+				<foreach item='File' property='filename'>
+					<in>
+						<items>
+							<include name='${foldername}/*.xml' />
+						</items>
+					</in>
+					<do>
+						<property name='filename.noext' value="${path::get-file-name-without-extension(filename)}"/>
+						<exec workingdir='${foldername}' basedir='Common\docbook\xsltproc\' program='xsltproc.exe' commandline='-o ..\..\${content.doc.output.dir}\${filename.noext}.html --stringparam current.docid ${filename.noext} --stringparam target.database.document ../Common/olinkdb.xml --stringparam collect.xref.targets ${collect.xref.targets} --stringparam targets.filename ../Common/${filename.noext}.db ..\Common\v1integration.xsl ${filename}'  />
+					</do>
+				</foreach>
+			</do>
+		</foreach>						
+	</target>	
+
+	<target name='gendoc.clean'>
+		<delete dir='${doc.output.dir}' if='${directory::exists(doc.output.dir)}' failonerror='false' />
+	</target>
+		
+	<!--== PUBLISH ==-->
+	<target name='publish' depends='package' description='Copy final package to Builds folder'>
+		<copy todir='${publish.dir}' flatten='true' overwrite='true'>
+			<fileset>
+				<include name='${package.distro.zipfile}' />
+				<include name='${package.source.zipfile}' />
+			</fileset>
+		</copy>
+	</target>
+</project>
