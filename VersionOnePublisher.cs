@@ -95,7 +95,6 @@ namespace ccnet.VersionOnePublisher.plugin {
             if(!UseProxy) {
                 return null;
             }
-
             Uri uri = new Uri(ProxyUrl);
             return new ProxySettings(uri, ProxyUsername, ProxyPassword, ProxyDomain);
         }
@@ -112,8 +111,9 @@ namespace ccnet.VersionOnePublisher.plugin {
                 run.Description = GetModificationDescription(changes);
                 run.Save();
                 string str = CreateBuildUrl(result);
-                if(!string.IsNullOrEmpty(str))
+                if (!string.IsNullOrEmpty(str)) {
                     run.CreateLink("Build Report", str, true);
+                }
                 SetChangeSets(run, changes);
             }
         }
@@ -124,15 +124,18 @@ namespace ccnet.VersionOnePublisher.plugin {
         /// <param name="modifications">The CCNet Modifications collection.</param>
         /// <returns>A collection of ChangeInfo.</returns>
         private static IEnumerable<ChangeInfo> ResolveChanges(IEnumerable<Modification> modifications) {
-            IDictionary<int, ChangeInfo> changes = new Dictionary<int, ChangeInfo>();
-            foreach(Modification mod in modifications)
-                if(!changes.ContainsKey(mod.ChangeNumber))
+            IDictionary<string, ChangeInfo> changes = new Dictionary<string, ChangeInfo>();
+
+            foreach (Modification mod in modifications) {
+                if (!changes.ContainsKey(mod.ChangeNumber)) {
                     changes.Add(mod.ChangeNumber, new ChangeInfo(mod));
+                }
+            }
             return changes.Values;
         }
 
         private class ChangeInfo {
-            public readonly int Number;
+            public readonly string Number;
             public readonly string Comment;
             public readonly string User;
             public readonly DateTime Stamp;
@@ -175,13 +178,15 @@ namespace ccnet.VersionOnePublisher.plugin {
                         //workitem.CompletedIn.Clear();
 
                         List<BuildRun> toRemove = new List<BuildRun>();
-                        foreach(BuildRun otherRun in workitem.CompletedIn)
-                            if(otherRun.BuildProject == run.BuildProject)
+                        foreach (BuildRun otherRun in workitem.CompletedIn) {
+                            if (otherRun.BuildProject == run.BuildProject) {
                                 toRemove.Add(otherRun);
+                            }
+                        }
 
-                        foreach(BuildRun buildRun in toRemove)
+                        foreach (BuildRun buildRun in toRemove) {
                             workitem.CompletedIn.Remove(buildRun);
-
+                        }
 
                         workitem.CompletedIn.Add(run);
                         Trace("Associated ChangeSet with PrimaryWorkitem: {0}", workitem.ID);
@@ -238,8 +243,9 @@ namespace ccnet.VersionOnePublisher.plugin {
 
         private static string GetModificationDescription(IEnumerable<ChangeInfo> changes) {
             StringBuilder result = new StringBuilder();
-            foreach(ChangeInfo change in changes)
+            foreach (ChangeInfo change in changes) {
                 result.Append(string.Format("{0}: {1}<br>", change.User, change.Comment));
+            }
             return result.ToString();
         }
 
@@ -279,7 +285,6 @@ namespace ccnet.VersionOnePublisher.plugin {
             if(CcWebRoot == null) {
                 return null;
             }
-
             List<string> parts = new List<string>();
 
             string buildTime = (string)result.IntegrationProperties["CCNetBuildTime"];
@@ -293,10 +298,10 @@ namespace ccnet.VersionOnePublisher.plugin {
             string file = "log" + buildDate + buildTime + (result.Succeeded ? "Lbuild." + buildLabel : string.Empty) + ".xml";
 
             parts.Add(CcWebRoot);
-            
-            if(!CcWebRoot.EndsWith("/"))
+
+            if (!CcWebRoot.EndsWith("/")) {
                 parts.Add("/");
-            
+            }            
             parts.Add("server/");
             parts.Add(String.IsNullOrEmpty(CcBuildServer) ? "local" : CcBuildServer);
             parts.Add("/project/");
@@ -318,8 +323,10 @@ namespace ccnet.VersionOnePublisher.plugin {
             filter.References.Add(result.ProjectName);
             filter.State.Add(State.Active);
             ICollection<BuildProject> projects = Instance.Get.BuildProjects(filter);
-            foreach(BuildProject project in projects)
+
+            foreach (BuildProject project in projects) {
                 return project;
+            }
             Trace("Couldn't find BuildProject for {0}", result.ProjectName);
             return null;
         }
