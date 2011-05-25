@@ -155,8 +155,8 @@
 	</target>
 
 	<target name='package.init'>
-		<property name='package.distro.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin-${build.version}.zip' />
-		<property name='package.source.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin.Source-${build.version}.zip' />
+		<property name='package.distro.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin16-${build.version}.zip' />
+		<property name='package.source.zipfile' value='${package.dir}\ccnet.VersionOnePublisher.plugin16.Source-${build.version}.zip' />
 		<property name='stage.src.dir' value='${stage.dir}\source' />
 		<property name='stage.bin.dir' value='${stage.dir}\bin' />
 	</target>
