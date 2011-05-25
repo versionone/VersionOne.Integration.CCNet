@@ -95,7 +95,10 @@
 				<include name='**\*' />
 				<exclude name='**\bin\**' />
 				<exclude name='**\obj\**' />
-				<exclude name='**\Common\**' />
+				<exclude name='**\Common\docbook\**' />
+        <exclude name='**\Common\msbuild\**' />
+        <exclude name='**\Common\NAnt\**' />
+        <exclude name='**\Common\Tools\**' />
 				<exclude name='**\temp\**' />
 				<exclude name='**\${stage.dir}\**' />
 				<exclude name='**\${package.dir}\**' />
