@@ -10,7 +10,7 @@
     <property name='svn.label' value='Build ${release}.${build.number}' />
   </if>
 
-	<property name='publish.public' value='\\files\Builds\ccnet.VersionOnePublisher.plugin\${buildnumber}' />
+	<property name='publish.public' value='\\files\Builds\ccnet.VersionOnePublisher.plugin.16\${buildnumber}' />
 
 	<target name='launch-build'>
 		<nant buildfile='ccnet.VersionOnePublisher.plugin.build' inheritall='true' target='release setversion cleanclean compile package publish'>
