@@ -163,6 +163,7 @@ namespace ccnet.VersionOnePublisher.plugin {
                     // We don't have one yet. Create one.
                     string name = string.Format("{0} on {1}", change.User, change.Stamp);
                     ChangeSet changeSet = Instance.Create.ChangeSet(name, change.Number.ToString());
+                    changeSet.Description = change.Comment;
                     changeSets = new List<ChangeSet>();
                     changeSets.Add(changeSet);
                     Trace("Created new ChangeSet: {0}", name);
