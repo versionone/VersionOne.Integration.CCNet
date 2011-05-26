@@ -146,6 +146,9 @@
 					<fileset basedir='${gizmo.dir}\bin\${build.config}'>
 						<include name='*' />
 						<exclude name='config.xml' />
+            <exclude name='NetReflector.dll' />
+            <exclude name='ThoughtWorks.CruiseControl.Remote.dll' />
+            <exclude name='ThoughtWorks.CruiseControl.Core.dll' />
 					</fileset>
 				</copy>
 				<copy todir='${stage.bin.dir}\Doc'>
