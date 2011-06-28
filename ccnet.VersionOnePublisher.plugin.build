@@ -9,8 +9,6 @@
 	<property name='package.dir' value='package' />
 	<property name='publish.dir' value='publish' unless="${property::exists('publish.dir')}" />
 
-	<property name="doc.output.dir" value="doc"/>
-
 	<if test="${property::exists('ver.build')}">
 		<property name='build.version' value='${ver.major.minor}.${ver.build}' />
 		<if test="${property::exists('ver.revision') and int::parse(ver.revision) > 0}">
@@ -46,7 +44,6 @@
 	<target name='clean'>
 		<call target='compile.clean' />
 		<call target='package.clean' />
-		<call target='gendoc.clean' />
 		<delete dir='${stage.dir}' if='${directory::exists(stage.dir)}' failonerror='false' />
 	</target>
 	<target name='cleanclean'>
@@ -86,7 +83,7 @@
 	</target>
 	
 	<!--== PACKAGE ==-->
-	<target name='package' description='Create final package' depends='package.init package.clean gendoc package.distro.stage'>
+	<target name='package' description='Create final package' depends='package.init package.clean package.distro.stage'>
 		<mkdir dir='${package.dir}' unless='${directory::exists(package.dir)}' />
 
 		<!-- move the source to the stage dir -->
@@ -156,6 +153,12 @@
 						<include name='**\**' />
 					</fileset>
 				</copy>
+				<copy todir='${stage.bin.dir}\CCNetDoc'>
+					<fileset basedir='${gizmo.dir}/DocSource/CCNetDoc'>
+						<include name='**/**'/>
+					</fileset>
+				</copy>
+				
 			</do>
 		</foreach>
 	</target>
@@ -172,84 +175,7 @@
 		<delete dir='${stage.src.dir}' if='${directory::exists(stage.src.dir)}' failonerror='false' />
 		<delete dir='${stage.bin.dir}' if='${directory::exists(stage.bin.dir)}' failonerror='false' />
 	</target>
-
-	<!--== GENDOC ==-->
-	<target name='gendoc'>
-		<call target='gendoc.init'/>
-		<call target='gendoc.index'/>
-		<call target='gendoc.content'/>
-	</target>
 	
-	<target name='gendoc.init'>
-		<property name='doc.source.dir' value='DocSource'/>
-		<mkdir dir='${doc.output.dir}\Common' />
-		<copy todir='${doc.output.dir}\Common' file='${doc.source.dir}\Common\v1integration.css' />
-		<copy todir='${doc.output.dir}\CCNetDoc'>
-		    <fileset basedir='${doc.source.dir}/CCNetDoc'>
-		        <include name='**/*'/>
-		    </fileset>
-		</copy>
-		<copy todir='${doc.output.dir}\V1Publisher'>
-		    <fileset basedir='${doc.source.dir}/V1Publisher'>
-		        <include name='**/*.jpg'/>
-		    </fileset>
-		</copy>
-	</target>
-	
-	<target name='gendoc.index' description='Generate Documentation' depends='gendoc.init'>
-		<foreach item='File' property='filename'>
-			<in>
-				<items>
-					<include name='${doc.source.dir}\*.xml' />
-				</items>
-			</in>		
-			<do>
-				<property name='filename.noext' value="${path::get-file-name-without-extension(filename)}"/>
-				<exec workingdir='${doc.source.dir}' basedir='Common\docbook\xsltproc\' program='xsltproc.exe' commandline='-o ..\${doc.output.dir}\${filename.noext}.html Common\index.xsl ${filename}' />					
-			</do>
-		</foreach>
-	</target>
-	
-	<target name='gendoc.olink' description='Create target databases for the olink command' depends='gendoc.init'>
-		<property name='collect.xref.targets' value='only'/>
-		<call target='gendoc.content.base'/>
-	</target>
-	
-	<target name='gendoc.content' description='Generate documentation for the content pages' depends='gendoc.init,gendoc.olink'>
-		<property name='collect.xref.targets' value='no'/>	
-		<call target='gendoc.content.base'/>
-	</target>
-	
-	<target name='gendoc.content.base' depends='gendoc.init'>
-		<foreach item='Folder'  property='foldername'>
-			<in>
-				<items basedir='${doc.source.dir}'>
-					<include name='*'/>
-					<exclude name='Common'/>
-					<exclude name='.'/>					
-				</items>
-			</in>
-			<do>
-				<property name='content.doc.output.dir' value='${doc.output.dir}\${path::get-file-name(foldername)}'/>
-				<mkdir dir='${content.doc.output.dir}' />
-				<foreach item='File' property='filename'>
-					<in>
-						<items>
-							<include name='${foldername}/*.xml' />
-						</items>
-					</in>
-					<do>
-						<property name='filename.noext' value="${path::get-file-name-without-extension(filename)}"/>
-						<exec workingdir='${foldername}' basedir='Common\docbook\xsltproc\' program='xsltproc.exe' commandline='-o ..\..\${content.doc.output.dir}\${filename.noext}.html --stringparam current.docid ${filename.noext} --stringparam target.database.document ../Common/olinkdb.xml --stringparam collect.xref.targets ${collect.xref.targets} --stringparam targets.filename ../Common/${filename.noext}.db ..\Common\v1integration.xsl ${filename}'  />
-					</do>
-				</foreach>
-			</do>
-		</foreach>						
-	</target>	
-
-	<target name='gendoc.clean'>
-		<delete dir='${doc.output.dir}' if='${directory::exists(doc.output.dir)}' failonerror='false' />
-	</target>
 		
 	<!--== PUBLISH ==-->
 	<target name='publish' depends='package' description='Copy final package to Builds folder'>
