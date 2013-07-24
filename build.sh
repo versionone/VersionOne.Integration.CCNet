@@ -163,6 +163,8 @@ done
 rm -rf $WORKSPACE/*.nupkg
 MSBuild.exe $SOLUTION_FILE -m \
   -t:Clean \
+  -p:Configuration="$Configuration" \
+  -p:Platform="$Platform" \
   -p:Verbosity=Diagnostic
 
 
@@ -178,6 +180,8 @@ install_nuget_deps
 
 WIN_SIGNING_KEY="`winpath "$SIGNING_KEY"`"
 MSBuild.exe $SOLUTION_FILE \
+  -p:Configuration="$Configuration" \
+  -p:Platform="$Platform" \
   -p:SignAssembly=$SIGN_ASSEMBLY \
   -p:AssemblyOriginatorKeyFile=$WIN_SIGNING_KEY \
   -p:RequireRestoreConsent=false \
