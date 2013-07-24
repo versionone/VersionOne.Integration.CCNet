@@ -1,12 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8E6D9082-6E18-435A-9588-DE65767797AE}"
-	ProjectSection(SolutionItems) = preProject
-		ccnet.VersionOnePublisher.plugin.build = ccnet.VersionOnePublisher.plugin.build
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionOne.Integration.CCNet", "VersionOne.Integration.CCNet\VersionOne.Integration.CCNet.csproj", "{5ECC4873-334D-4AB2-8749-02B3E28DD0D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet.VersionOnePublisher.plugin", "ccnet.VersionOnePublisher.plugin.csproj", "{20AC205F-E7F4-41EE-BE32-9BA113B2F8C8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A1BC0833-3EDE-4B3C-B26A-CDC37D7EF78C}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,10 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{20AC205F-E7F4-41EE-BE32-9BA113B2F8C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20AC205F-E7F4-41EE-BE32-9BA113B2F8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20AC205F-E7F4-41EE-BE32-9BA113B2F8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20AC205F-E7F4-41EE-BE32-9BA113B2F8C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ECC4873-334D-4AB2-8749-02B3E28DD0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ECC4873-334D-4AB2-8749-02B3E28DD0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ECC4873-334D-4AB2-8749-02B3E28DD0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ECC4873-334D-4AB2-8749-02B3E28DD0D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@ using VersionOne.SDK.ObjectModel.Filters;
  * VersionOne would like to thank Andreas Axelsson for his 
  * contribution to improving this component.
  */
-namespace ccnet.VersionOnePublisher.plugin {
+namespace VersionOne.Integration.CCNet {
     [ReflectorType("versionone")]
     public class VersionOnePublisher : ITask {
         private string url;
