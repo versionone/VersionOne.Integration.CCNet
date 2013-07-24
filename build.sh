@@ -163,8 +163,6 @@ done
 rm -rf $WORKSPACE/*.nupkg
 MSBuild.exe $SOLUTION_FILE -m \
   -t:Clean \
-  -p:Configuration="$Configuration" \
-  -p:Platform="$Platform" \
   -p:Verbosity=Diagnostic
 
 
@@ -183,19 +181,6 @@ MSBuild.exe $SOLUTION_FILE \
   -p:SignAssembly=$SIGN_ASSEMBLY \
   -p:AssemblyOriginatorKeyFile=$WIN_SIGNING_KEY \
   -p:RequireRestoreConsent=false \
-  -p:Configuration="$Configuration" \
-  -p:Platform="$Platform" \
   -p:Verbosity=Diagnostic
-
-
-
-# ---- Produce NuGet .nupkg file ----------------------------------------------------------
-
-unset Platform
-cd $WORKSPACE/$MAIN_DIR
-NuGet.exe pack $MAIN_CSPROJ \
-  -Symbols \
-  -Properties Configuration="$Configuration"
-cd $WORKSPACE
 
 
