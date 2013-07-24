@@ -229,8 +229,9 @@ namespace VersionOne.Integration.CCNet {
             foreach(Workitem workitem in workitems) {
                 if(workitem is PrimaryWorkitem) {
                     result.Add((PrimaryWorkitem)workitem);
-                } else if(workitem is SecondaryWorkitem) {
-                    result.Add(((SecondaryWorkitem)workitem).Parent);
+                } else if(workitem is SecondaryWorkitem)
+                {
+                    result.Add((PrimaryWorkitem)((SecondaryWorkitem)workitem).Parent);
                 } else {
                     // Shut 'er down, Clancy, she's pumping mud.
                     throw new ApplicationException(string.Format("Found unexpected Workitem type: {0}", workitem.GetType()));
