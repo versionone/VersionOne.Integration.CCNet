@@ -1,76 +1,344 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>Versionone.integration.ccnet by versionone</title>
-  </head>
+    <head>
+        <title>CruiseControl.NET Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
 
-  <body>
-    <div id="container">
-      <div class="inner">
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+<td style="width:10%"/>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 25, 2011 by <font color="#0050B2">jerry</font>.
+                                    </div>
 
-        <header>
-          <h1>Versionone.integration.ccnet</h1>
-          <h2>Link agile workitems to tangible, working software in the form of builds in CruiseControl.NET.</h2>
-        </header>
+				    <div>
+<ul>
+    <li><a href='#CruiseControl.NETPublisher-Description'>Description</a></li>
+    <li><a href='#CruiseControl.NETPublisher-SystemRequirements'>System Requirements</a></li>
+    <li><a href='#CruiseControl.NETPublisher-Downloads'>Downloads</a></li>
+    <li><a href='#CruiseControl.NETPublisher-Installation'>Installation</a></li>
+    <li><a href='#CruiseControl.NETPublisher-Configuration'>Configuration</a></li>
+<ul>
+    <li><a href='#CruiseControl.NETPublisher-ConfigureVersionOne'>Configure VersionOne </a></li>
+    <li><a href='#CruiseControl.NETPublisher-ConfigureCruiseControl.NET'>Configure CruiseControl.NET </a></li>
+<ul>
+    <li><a href='#CruiseControl.NETPublisher-Example'>Example</a></li>
+</ul>
+</ul>
+</ul></div>
+<h1><a name="CruiseControl.NETPublisher-Description"></a>Description</h1>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/versionone/VersionOne.Integration.CCNet/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/versionone/VersionOne.Integration.CCNet/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/versionone/VersionOne.Integration.CCNet" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+<p>The VersionOne CruiseControl.NET integration creates a record of CruiseControl builds in VersionOne, so the development teams can associate stories and defects to a particular build. This visibility is useful when identifying problem builds or generating release notes.</p>
 
-        <hr>
+<p>Once the VersionOne Publisher has been installed, team members include a story or defect ID, such as “S-01454”, in the comments of their SCM commit . Every time a build executes the publisher creates a BuildRun asset in VersionOne with details of the build. If the build comment contains story or defect IDs, the publisher will also create or reuse change-sets assets in VersionOne and assoicates the build with the appropriate story or defect.</p>
 
-        <section id="main_content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<p>Using this integration you can better answer the following questions: </p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<ul>
+	<li>Defects
+	<ul>
+		<li>Which build the defect was reported against?</li>
+		<li>Which build contained the fix for the defect?</li>
+		<li>Which builds contain work for the defect?</li>
+	</ul>
+	</li>
+</ul>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<ul>
+	<li>For Stories (Backlog Item)
+	<ul>
+		<li>Which builds contain work for the story?</li>
+		<li>Which build contained the completed story?</li>
+	</ul>
+	</li>
+</ul>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ul>
+	<li>For Build Runs
+	<ul>
+		<li>Which defects were fixed?</li>
+		<li>Which stories were completed?</li>
+		<li>Which defects were introduced?</li>
+		<li>When work for a story or defect was included?</li>
+		<li>Which Change-sets were included?</li>
+	</ul>
+	</li>
+</ul>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+	<li>For a range of Build Runs
+	<ul>
+		<li>Which stories were completed?</li>
+		<li>Which defects were fixed?</li>
+		<li>Which defects were introduced?</li>
+	</ul>
+	</li>
+</ul>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>The following sequence diagram illustrates the VersionOne CruiseControl.NET publisher behavior.<br/>
+<span class="image-wrap" style=""><a class="confluence-thumbnail-link 736x534" href='http://confluence/download/attachments/10912342/Sequence.png'><img src="attachments/thumbnails/10912342/11173908" border="0"/></a></span></p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<h1><a name="CruiseControl.NETPublisher-SystemRequirements"></a>System Requirements</h1>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+<p>VersionOne: </p>
+<ul>
+	<li>8.1 or above, including Team Edition</li>
+</ul>
 
-        <footer>
-          Versionone.integration.ccnet is maintained by <a href="https://github.com/versionone">versionone</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
 
-        
-      </div>
-    </div>
-  </body>
+<p>Integration Server:</p>
+<ul>
+	<li>Operating System &#8211; Windows 2000, 2003</li>
+</ul>
+
+
+<p>Continuous Integration Server:</p>
+<ul>
+	<li>Tested with CruiseControl.NET 1.3.0.2918 - 1.6</li>
+</ul>
+
+
+<h1><a name="CruiseControl.NETPublisher-Downloads"></a>Downloads</h1>
+
+<p>The latest version of V1CCNetPublisher is available at <a href="http://community.versionone.com/sdk/Documentation/Integrations.aspx">V1: Integration Downloads</a></p>
+
+<h1><a name="CruiseControl.NETPublisher-Installation"></a>Installation</h1>
+
+<p>These instructions presume that <a href="http://confluence.public.thoughtworks.org/display/CCNET/Welcome+to+CruiseControl.NET">CruiseControl.NET</a> is already installed, configured, and working properly.</p>
+<ol>
+	<li>Ensure Connectivity<br/>
+Verify that you can connect to your VersionOne instance from the machine hosting CruiseControl.NET<br class="atl-forced-newline" />
+<br class="atl-forced-newline" /></li>
+	<li>Extract Files<br/>
+Download VersionOne publisher using the link above and extract it into a folder of your choice. This can be a temporary location since we will copy some of these files during CruiseControl.NET configuration.<br class="atl-forced-newline" />
+<br class="atl-forced-newline" /></li>
+	<li>Configure
+	<ol>
+		<li><a href="#CruiseControl.NETPublisher-ConfigureV1">Configure VersionOne</a></li>
+		<li><a href="#CruiseControl.NETPublisher-ConfigureCCNET">Configure CruiseControl.NET</a></li>
+	</ol>
+	</li>
+	<li>Verify the installation<br/>
+Once configuration is complete use the following steps to verify that the build integration is working
+	<ol>
+		<li>Navigate to CruiseControl.NET</li>
+		<li>Force a build on the project you configured</li>
+		<li>Wait for build to complete</li>
+		<li>Navigate to VersionOne</li>
+		<li>Login</li>
+		<li>Select VersionOne project in 'My Projects' dropdown</li>
+		<li>Navigate to the Reports | Reports Overview page</li>
+		<li>Select the "Build Run Quicklist" Report<br/>
+You should find an entry in the Build Run Quick List grid for the build you forced. If not, verify your configuration.</li>
+	</ol>
+	</li>
+</ol>
+
+
+<h1><a name="CruiseControl.NETPublisher-Configuration"></a>Configuration</h1>
+
+<h2><a name="CruiseControl.NETPublisher-ConfigureVersionOne"></a>Configure VersionOne<a name="CruiseControl.NETPublisher-ConfigureV1"></a> </h2>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>If you are using Team Edition, you need to manually create the Build Project.  Instructions for doing this are available on the <a href="http://community.versionone.com/KnowledgeBase/FAQs/Q11417.aspx">VersionOne Community Site</a>.</td></tr></table></div>
+<ol>
+	<li>Log into the VersionOne application as admin</li>
+	<li>Navigate to the Admin &#124; Configuration &#124; System page.</li>
+	<li>Check the “Enable Build Integration” checkbox and click the Apply button.<br/>
+<span class="image-wrap" style=""><a class="confluence-thumbnail-link 1247x803" href='http://confluence/download/attachments/10912342/EnableBuildIntegration.jpg'><img src="attachments/thumbnails/10912342/11173907" border="0"/></a></span></li>
+	<li>Navigate to the Admin &#124; Projects &#124; Build Project page<br/>
+<span class="image-wrap" style=""><a class="confluence-thumbnail-link 1249x319" href='http://confluence/download/attachments/10912342/BuildProjects.jpg'><img src="attachments/thumbnails/10912342/11173906" border="0"/></a></span></li>
+	<li>Click Add to add a new Build Project</li>
+	<li>Specify the following
+	<ul>
+		<li>Name &#8211; this is how the Build Project will be known to VersionOne users</li>
+		<li>Reference &#8211; this is how the Build Project is known to Cruise Control</li>
+	</ul>
+	</li>
+	<li>Click Ok to save the new Build Project</li>
+	<li>Navigate to the Admin &#124; Projects &#124; Projects page</li>
+	<li>Click Edit on the row for the project you want associated with a Build Project</li>
+	<li>Using the “Build Projects” dropdown add the appropriate Build Project.<br/>
+<span class="image-wrap" style=""><a class="confluence-thumbnail-link 983x624" href='http://confluence/download/attachments/10912342/AssignBuildProjectToProject.jpg'><img src="attachments/thumbnails/10912342/11173905" border="0"/></a></span></li>
+	<li>Click Ok to accept the changes</li>
+	<li>Logout</li>
+</ol>
+
+
+<h2><a name="CruiseControl.NETPublisher-ConfigureCruiseControl.NET"></a>Configure CruiseControl.NET<a name="CruiseControl.NETPublisher-ConfigureCCNET"></a></h2>
+
+<p>This section describes how to configure CruiseControl.NET for use with VersionOne</p>
+
+<ol>
+	<li>
+	<ol>
+		<li>Copy the following files from the downloaded package into your CruiseControl server directory
+		<ul>
+			<li>ccnet.VersionOnePublisher.plugin.dll</li>
+			<li>VersionOne.SDK.APIClient.dll</li>
+			<li>VersionOne.SDK.ObjectModel.dll<br/>
+The other dlls are provided as reference only and should not be copied or moved.</li>
+		</ul>
+		</li>
+		<li>Add the VersionOne publisher to the list of publishers for the appropriate project in your CruiseControl.NET configuration file (ccnet.config)
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml">
+<span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag">&lt;xmllogger /&gt;</span>
+    &lt;versionone url=... 
+                integratedauth=...
+                username=... 
+                password=...
+                useproxy=...
+                proxyurl=...
+                proxyusername=...
+                proxypassword=...
+                proxydomain=...
+                webroot=...
+                referenceexpression=...
+                referencefield=.../&gt;
+<span class="code-tag">&lt;/publishers&gt;</span>
+</pre>
+</div></div></li>
+		<li>Use the following table to configure the VersionOne Publisher
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> url </td>
+<td class='confluenceTd'> The URL of the VersionOne Application. For example: <a href="http://server/VersionOne/">http://server/VersionOne/</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> integratedauth </td>
+<td class='confluenceTd'> Set this attribute to "true" if your VersionOne instance is configured to use Windows Integrated Authentication. </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> The username to authenticate with. </td>
+<td class='confluenceTd'> Yes, when integratedauth is false,<br class="atl-forced-newline" />optional when integratedauth is true </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password to authenticate with. </td>
+<td class='confluenceTd'> Yes, when integratedauth is false,<br class="atl-forced-newline" />optional when integratedauth is true </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> useproxy </td>
+<td class='confluenceTd'> Enables support for proxy connection to VersionOne </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> proxyurl </td>
+<td class='confluenceTd'> URL for proxy server </td>
+<td class='confluenceTd'> Yes, when using a proxy </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> proxyusername </td>
+<td class='confluenceTd'> User name for proxy server </td>
+<td class='confluenceTd'> Yes, when using a proxy </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> proxypassword </td>
+<td class='confluenceTd'> Password for proxy user </td>
+<td class='confluenceTd'> Yes, when using a proxy </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> proxydomain </td>
+<td class='confluenceTd'> Proxy domain </td>
+<td class='confluenceTd'> Yes, when using a proxy </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> webroot </td>
+<td class='confluenceTd'> The root of the URL used for linking to build logs. For example: <a href="http://localhost/ccnet/">http://localhost/ccnet/</a> </td>
+<td class='confluenceTd'> False </td>
+<td class='confluenceTd'> Null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> server </td>
+<td class='confluenceTd'> The "BuildServer" portion of the URL used for linking to build logs. For example: <a href="http://localhost/ccnet/server/">http://localhost/ccnet/server/</a>{BuildServer}/project/... </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> "local" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> referenceexpression </td>
+<td class='confluenceTd'> The regular expression to use when matching primary workitems (stories and defects) with change comments. </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> referencefield </td>
+<td class='confluenceTd'> The system name of an attribute to search when matching primary workitems (stories and defects) with change comments.</td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+</tbody></table>
+</div>
+</li>
+	</ol>
+	</li>
+</ol>
+
+
+<h3><a name="CruiseControl.NETPublisher-Example"></a>Example</h3>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml">
+<span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag">&lt;xmllogger /&gt;</span>
+    &lt;versionone url=<span class="code-quote">"http://V1Host/VersionOne/"</span> 
+                username=<span class="code-quote">"admin"</span> 
+                password=<span class="code-quote">"admin"</span> 
+                webroot=<span class="code-quote">"http://CCHost/ccnet"</span> 
+                referenceexpression=<span class="code-quote">"[A-Z]{1,2}-[0-9]+"</span> 
+                referencefield=<span class="code-quote">"Number"</span>/&gt;
+<span class="code-tag">&lt;/publishers&gt;</span>
+</pre>
+</div></div>
+<p>The publisher above will:</p>
+<ul>
+	<li>Publish to a VersionOne instance located at <a href="http://V1Host/VersionOne/">http://V1Host/VersionOne/</a></li>
+	<li>That VersionOne instance is using VersionOne authentication (there is no integratedauth attribute)</li>
+	<li>Connect to the VersionOne instance as the user "admin" using a password "admin"</li>
+	<li>Use the regular expression "A&#45;Z{1,2}-0&#45;9+" when parsing change comments to find VersionOne identifiers</li>
+	<li>If a VersionOne identifier is found, the publisher will search the "Number" field to find the matching VersionOne asset.</li>
+	<li>The BuildRun created in VersionOne will link back to the CruiseControl server located at <a href="http://CCHost/ccnet">http://CCHost/ccnet</a>.</li>
+</ul>
+
+
+                    			    </td>
+<td style="width:10%"/>
+		    </tr>
+	    </table>
+ 	    <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td align="left"><font color="grey">Document generated on Jun 28, 2011 08:30</font></td>
+		    </tr>
+	    </table> 
+    </body>
 </html>
