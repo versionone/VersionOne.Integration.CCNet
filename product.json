@@ -42,6 +42,14 @@
     "updatesSection": {
         "updates": [
             {
+                "date": "2013-07-24T17:00:00.000Z",
+                "description": "Summer 2013",
+                "version": "9.0.0.50",
+                "releaseNotes": "Updated VersionOne SDK libraries.",
+                "qualityBand": "mature",
+                "downloadUrl": "http://platform.versionone.com.s3.amazonaws.com/downloads/VersionOne.Integration.CCNet_9.0.0.50.zip"
+            },
+            {
                 "date": "2011-07-01T00:00:00.000Z",
                 "description": "Summer 2011",
                 "version": "8.1.0.47",
